@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{css/style.css}">
+</head>
+<body>
+<div class="container" id="container">
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+        <a class="navbar-brand" href="/">Online Library</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <form class="form-inline mr-auto mt-2 mt-lg-0" action="/user/search">
+                <input class="form-control mr-sm-2" type="search" name="title" required="" id="search" placeholder="search">
+                <button id="btnSearch" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <h2 class="navbar-brand" sec:authentication="name">Username</h2>
+            <form class="form-inline my-2 my-lg-0" th:action="@{/logout}" method="post">
+                <input class="btn btn-outline-warning my-2 my-sm-0" type="submit" value="Logout"/>
+            </form>
+        </div>
+    </nav>
+    <p sec:authorize="hasAnyAuthority('ADMIN')">
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample">
+            Add new book
+        </button>
+    </p>
+    <div sec:authorize="hasAnyAuthority('ADMIN')" class="collapse" id="collapseExample">
+
+        <form id="form" method="post" enctype="multipart/form-data" th:action="@{/admin/create}">
+            <div class="form-group">
+                <label for="nameAuthor">Name</label>
+                <input type="text" name="name" class="form-control" id="nameAuthor" aria-describedby="name" placeholder="Enter name">
+            </div>
+            <div class="form-group">
+                <label for="lnameAuthor">Last name</label>
+                <input type="text" class="form-control" name="lastName" id="lnameAuthor" aria-describedby="lastName" placeholder="Enter last name">
+            </div>
+            <div class="form-group">
+                <label for="title">Title book</label>
+                <input type="text" class="form-control" name="title" id="title" aria-describedby="title" placeholder="Enter title">
+            </div>
+            <div class="form-group">
+                <label for="desc">Description</label>
+                <textarea class="form-control" name="description" id="desc" placeholder="Enter description"></textarea>
+            </div>
+            <div class="form-group">
+                <div class="custom-file">
+                    <input class="custom-file-input" type="file" name="file" id="file" aria-describedby="title">
+                    <label class="custom-file-label" for="file">Choose file...</label>
+                </div>
+            </div>
+            <button type="submit" id="sbm" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4" id="block">
+        <div class="col">
+            <div class="row">
+                <div class="card mb-5 col-md-3"  th:each="book: ${books}">
+                    <h5 class="card-title card-header" th:text="${book.getTitle()}"></h5>
+                    <div class="card-body">
+                        <p class="card-text" th:text="${book.getDescription()}"></p>
+                        <div th:each="author: ${book.getAuthors()}">
+                            <p class="card-muted" th:text="${author.getName()} + ' ' + ${author.getLastName()}"></p>
+                        </div>
+                    </div>
+                    <div sec:authorize="hasAnyAuthority('ADMIN')" class="card-footer bg-transparent border-success" style="display: flex; justify-content: space-between">
+                        <form id="formDel" th:action="@{/admin/delete}">
+                            <button th:id="${book.getId()}" type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        <form class="form-inline my-2 my-lg-0" action="/user/download" method="get">
+                            <input name="id" type="hidden" th:value="${book.getId()}">
+                            <button type="submit" class="btn btn-outline-primary my-2 my-sm-0" >
+                                Download
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{/js/main.js}"></script>
+</body>
+</html>
