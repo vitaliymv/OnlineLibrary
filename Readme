@@ -1,6 +1,6 @@
 PostgreSQL on port 5432. Creating table with name library
 For adding user and admin, need in sql create script
-Username this is a password 
+Username this is a password
 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 INSERT INTO roles (name) VALUES ('USER');
 INSERT INTO roles (name) VALUES ('ADMIN');

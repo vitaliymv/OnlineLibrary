@@ -56,10 +56,7 @@
                 <textarea class="form-control" name="description" id="desc" placeholder="Enter description"></textarea>
             </div>
             <div class="form-group">
-                <div class="custom-file">
-                    <input class="custom-file-input" type="file" name="file" id="file" aria-describedby="title">
-                    <label class="custom-file-label" for="file">Choose file...</label>
-                </div>
+                <input class="form-control-file" type="file" name="file" id="file" aria-describedby="title">
             </div>
             <button type="submit" id="sbm" class="btn btn-primary">Submit</button>
         </form>
@@ -80,13 +77,13 @@
                         <form id="formDel" th:action="@{/admin/delete}">
                             <button th:id="${book.getId()}" type="submit" class="btn btn-danger">Delete</button>
                         </form>
-                        <form class="form-inline my-2 my-lg-0" action="/user/download" method="get">
-                            <input name="id" type="hidden" th:value="${book.getId()}">
-                            <button type="submit" class="btn btn-outline-primary my-2 my-sm-0" >
-                                Download
-                            </button>
-                        </form>
                     </div>
+                    <form class="form-inline my-2 my-lg-0" action="/user/download" method="get" style="display: flex; justify-content: space-between">
+                        <input name="id" type="hidden" th:value="${book.getId()}">
+                        <button type="submit" class="btn btn-outline-primary my-2 my-sm-0" >
+                            Download
+                        </button>
+                    </form>
                 </div>
             </div>
 
